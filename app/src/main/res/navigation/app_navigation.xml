@@ -4,15 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_navigation"
     app:startDestination="@id/mainFragment">
-
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.news.tryjuardi.MainFragment"
-        android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        android:name="com.news.tryjuardi.fragment.MainFragment"
+        android:label="Main Fragment"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/mainFragmenttoSourceFragment"
+            app:destination="@id/sourceFragment"/>
+    </fragment>
     <fragment
-        android:id="@+id/detailFragment"
-        android:name="com.news.tryjuardi.DetailFragment"
+        android:id="@+id/sourceFragment"
+        android:name="com.news.tryjuardi.fragment.SourceFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail">
+        <action
+            android:id="@+id/sourceFragmenttoArticleFragment"
+            app:destination="@id/articleFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/articleFragment"
+        android:name="com.news.tryjuardi.fragment.ArticleFragment"
+        android:label="fragment_article"
+        tools:layout="@layout/fragment_article" >
+        <action
+            android:id="@+id/articleFragmenttoViewArticleFragment"
+            app:destination="@id/viewArticleFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/viewArticleFragment"
+        android:name="com.news.tryjuardi.fragment.ViewArticleFragment"
+        android:label="fragment_view_article"
+        tools:layout="@layout/fragment_view_article" />
+
 </navigation>

@@ -1,8 +1,11 @@
-package com.news.tryjuardi
+package com.news.tryjuardi.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.news.tryjuardi.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
