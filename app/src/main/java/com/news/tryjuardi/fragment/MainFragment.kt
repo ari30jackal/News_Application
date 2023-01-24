@@ -1,10 +1,13 @@
 package com.news.tryjuardi.fragment
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.core.os.bundleOf
@@ -53,17 +56,25 @@ class MainFragment : Fragment() {
             }
 
         binding.btnSearchByKeyword.setOnClickListener {
+            hideKeyboard()
             keyword = binding.etSearch.text.toString()
             type = "keyword"
             if (keyword != "") {
                 viewModel.getByKeyword(keyword, page)
             }
+            else{
+                Toast.makeText(requireContext(), "Please Input Your Keyword", Toast.LENGTH_SHORT).show()
+            }
         }
         binding.btnSearchBySource.setOnClickListener {
+            hideKeyboard()
             keyword = binding.etSearch.text.toString()
             type="source"
             if (keyword != "") {
                 viewModel.getArticle(keyword, page)
+            }
+            else{
+                Toast.makeText(requireContext(), "Please Input Your Keyword", Toast.LENGTH_SHORT).show()
             }
         }
         setObserver()
@@ -79,7 +90,13 @@ class MainFragment : Fragment() {
         })
 
     }
-
+    fun Fragment.hideKeyboard() {
+        view?.let { activity?.hideKeyboard(it) }
+    }
+    fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
     override fun onDestroy() {
         super.onDestroy()
         requireActivity().finishAffinity()

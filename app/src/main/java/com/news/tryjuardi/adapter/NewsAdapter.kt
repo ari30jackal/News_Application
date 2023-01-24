@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.news.tryjuardi.databinding.NewsItemBinding
 import com.news.tryjuardi.model.Source
 import com.news.tryjuardi.model.news.Article
@@ -33,6 +34,11 @@ class NewsAdapter(
         with(holder) {
             with(newsList[position]) {
                 binding.tvCategory.text = title
+                context?.let {
+                    Glide.with(it)
+                        .load(urlToImage)
+                        .into(binding.ivNews)
+                };
             }
         }
     }

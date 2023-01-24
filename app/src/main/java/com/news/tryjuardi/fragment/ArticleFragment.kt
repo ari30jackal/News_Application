@@ -38,14 +38,12 @@ class ArticleFragment : Fragment(),NewsAdapter.NewsSelectedCallback {
     lateinit var binding: FragmentArticleBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentArticleBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
@@ -53,7 +51,7 @@ class ArticleFragment : Fragment(),NewsAdapter.NewsSelectedCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var arg = arguments?.getString("keyword").toString()
+        var arg = arguments?.getString("source").toString()
         var args = arg.split("&").toTypedArray()
         source = args[0]
         category = args[1]
@@ -80,6 +78,10 @@ class ArticleFragment : Fragment(),NewsAdapter.NewsSelectedCallback {
     private fun setObserver() {
         viewModel.getNewsLiveData().observe(requireActivity(), Observer {
             totalResult = it.totalResults
+            if (totalResult==0){
+                findNavController().navigate(R.id.backtoMain)
+                Toast.makeText(requireContext(), "no news from this source", Toast.LENGTH_SHORT).show()
+            }
             if (page != 1) {
                 newsArray.addAll(newsArray.size,it.articles as ArrayList<Article>)
                 adapter.notifyItemRangeChanged(
