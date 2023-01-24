@@ -2,6 +2,7 @@ package com.news.tryjuardi.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.navigation.findNavController
 import com.news.tryjuardi.R
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -11,4 +12,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
+
 }

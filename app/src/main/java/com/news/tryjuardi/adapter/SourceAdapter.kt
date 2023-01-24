@@ -9,47 +9,49 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.news.tryjuardi.R
+import com.news.tryjuardi.databinding.NewsItemBinding
 import com.news.tryjuardi.databinding.SourceItemBinding
 import com.news.tryjuardi.model.Source
 import com.news.tryjuardi.model.SourceResponse
+import com.news.tryjuardi.model.news.Article
 
 class SourceAdapter(
-    private var sourceModels: List<Source>,
-    private val sourceSelectedCallback: SourceSelectedCallback,
-    var category: String
-) :
-    RecyclerView.Adapter<SourceAdapter.ViewHolder>() {
-    inner class ViewHolder(var binding: SourceItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    private val sourceSelectedCallback:SourceSelectedCallback,
+) : RecyclerView.Adapter<SourceAdapter.ViewHolder>() {
+    var sourceList = arrayListOf<Source>()
+    private var context: Context? = null
+    inner class ViewHolder(val binding: SourceItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             binding.btnSource.setOnClickListener {
-                sourceSelectedCallback.onSourceSelected(sourceModels[adapterPosition])
+                sourceSelectedCallback.onSourceSelected(sourceList[position])
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        context = parent.context
         return ViewHolder(
-            SourceItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
+            SourceItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val sourceModel = sourceModels[position]
         with(holder) {
-            binding.btnSource.text = sourceModel.name
-
+            with(sourceList[position]) {
+                binding.btnSource.text = name
+            }
         }
     }
 
-    override fun getItemCount(): Int {
-        return sourceModels.size
-    }
+    override fun getItemCount() = sourceList.size
 
     interface SourceSelectedCallback {
         fun onSourceSelected(source: Source)
+    }
+
+    fun initData(sourceList: ArrayList<Source>) {
+        this.sourceList= sourceList
+
     }
 }

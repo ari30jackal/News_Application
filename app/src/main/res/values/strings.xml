@@ -2,6 +2,9 @@
     <string name="app_name">News Application</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="select_news_category">Select News Category</string>
+    <string name="select_news_category">News Category</string>
     <string name="news_source">News Source</string>
+    <string name="search_by_sources">Search By Sources</string>
+    <string name="search_by_keyword">Search By Keyword</string>
+    <string name="type_for_search">type for search</string>
 </resources>

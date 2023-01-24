@@ -9,10 +9,13 @@ import javax.inject.Inject
 class NewsRepository @Inject constructor(
     private val newsRemoteDataSource: NewsRemoteDataSource
 ) {
-    fun getSource(): Single<SourceResponse> {
-        return newsRemoteDataSource.getSource()
+    fun getSource(category:String,page:Int): Single<SourceResponse> {
+        return newsRemoteDataSource.getSource(category,page)
     }
     fun getArticles(source:String,page:Int):Single<NewsResponse>{
         return newsRemoteDataSource.getArticles(source,page)
+    }
+    fun getByKeyword(source:String,page:Int):Single<NewsResponse>{
+        return newsRemoteDataSource.getByKeyword(source,page)
     }
 }

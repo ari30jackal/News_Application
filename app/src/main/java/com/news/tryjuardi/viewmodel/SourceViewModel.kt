@@ -19,9 +19,9 @@ class SourceViewModel @Inject constructor(
     private var sourceLiveData = MutableLiveData<SourceResponse>()
     private val compositeDisposable = CompositeDisposable()
 
-    fun getSource() {
+    fun getSource(category:String,page:Int) {
         compositeDisposable.add(
-            newsRepository.getSource()
+            newsRepository.getSource(category,page)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<SourceResponse>() {

@@ -39,8 +39,6 @@ class NewsAdapter(
 
     override fun getItemCount() = newsList.size
 
-    private var onItemClickListener: ((Article) -> Unit)? = null
-
     interface NewsSelectedCallback {
         fun onNewsSelected(article: Article)
     }

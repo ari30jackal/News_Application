@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import androidx.annotation.RequiresApi
+import androidx.navigation.fragment.findNavController
+import com.news.tryjuardi.R
 import com.news.tryjuardi.databinding.FragmentArticleBinding
 import com.news.tryjuardi.databinding.FragmentViewArticleBinding
 
@@ -43,5 +45,8 @@ class ViewArticleFragment : Fragment() {
         binding.webview.loadUrl(url)
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        findNavController().navigate(R.id.backtoMain)
+    }
 }

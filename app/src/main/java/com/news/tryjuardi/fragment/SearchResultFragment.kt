@@ -14,20 +14,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.news.tryjuardi.R
 import com.news.tryjuardi.adapter.NewsAdapter
-import com.news.tryjuardi.adapter.SourceAdapter
-import com.news.tryjuardi.databinding.FragmentArticleBinding
 import com.news.tryjuardi.databinding.FragmentMainBinding
+import com.news.tryjuardi.databinding.FragmentSearchResultBinding
 import com.news.tryjuardi.model.news.Article
-import com.news.tryjuardi.model.news.NewsResponse
 import com.news.tryjuardi.utils.EndlessScrollingRecyclerView
 import com.news.tryjuardi.viewmodel.NewsViewModel
-import com.news.tryjuardi.viewmodel.SourceViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ArticleFragment : Fragment(),NewsAdapter.NewsSelectedCallback {
-    lateinit var category: String
-    lateinit var source: String
+class SearchResultFragment : Fragment(),NewsAdapter.NewsSelectedCallback {
+ lateinit var binding:FragmentSearchResultBinding
+    lateinit var type: String
+    lateinit var keyword: String
     var size = 0
     var page = 1
     var totalResult = 0
@@ -35,7 +33,6 @@ class ArticleFragment : Fragment(),NewsAdapter.NewsSelectedCallback {
     private val viewModel: NewsViewModel by viewModels()
     private lateinit var adapter: NewsAdapter
     var newsArray: ArrayList<Article> = ArrayList<Article>()
-    lateinit var binding: FragmentArticleBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,18 +42,17 @@ class ArticleFragment : Fragment(),NewsAdapter.NewsSelectedCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentArticleBinding.inflate(inflater, container, false)
+        binding = FragmentSearchResultBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var arg = arguments?.getString("keyword").toString()
+        var arg = arguments?.get("data").toString()
         var args = arg.split("&").toTypedArray()
-        source = args[0]
-        category = args[1]
+        keyword = args[0]
+        type = args[1]
         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvNews.layoutManager = layoutManager
         val scrollListener =
@@ -76,14 +72,16 @@ class ArticleFragment : Fragment(),NewsAdapter.NewsSelectedCallback {
         setObserver()
         binding.rvNews.addOnScrollListener(scrollListener)
     }
-
     private fun setObserver() {
+        viewModel.getErrorCodeResponse().observe(requireActivity(), Observer {
+            Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
+        })
         viewModel.getNewsLiveData().observe(requireActivity(), Observer {
             totalResult = it.totalResults
             if (page != 1) {
                 newsArray.addAll(newsArray.size,it.articles as ArrayList<Article>)
                 adapter.notifyItemRangeChanged(
-                 0,adapter.itemCount
+                    0,adapter.itemCount
                 )
             } else {
                 newsArray = it.articles as ArrayList<Article>
@@ -97,14 +95,26 @@ class ArticleFragment : Fragment(),NewsAdapter.NewsSelectedCallback {
 
     private fun doLoadData() {
         newsArray = adapter.newsList
-        viewModel.getArticle(source, page)
+        when(type){
+            "keyword"->{
+                viewModel.getByKeyword(keyword,page)
+            }
+            "source"->{
+                viewModel.getArticle(keyword,page)
+            }
+
+        }
     }
 
     override fun onNewsSelected(article: Article) {
         val bundle = bundleOf("url" to article.url)
-        findNavController().navigate(R.id.articleFragmenttoViewArticleFragment, bundle)
+        findNavController().navigate(R.id.searchFragmenttoViewArticleFragment, bundle)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        findNavController().navigate(R.id.backtoMain)
 
+    }
 
 }
