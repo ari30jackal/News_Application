@@ -1,7 +1,9 @@
 package com.news.tryjuardi.retrofit
 
 import com.news.tryjuardi.data.service.NewsService
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -16,15 +18,25 @@ object NewsRetrofit {
         val logging = HttpLoggingInterceptor()
         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
 
-        val okHttpClient = OkHttpClient.Builder()
-        okHttpClient.addInterceptor(logging)
-            .readTimeout(120, TimeUnit.SECONDS)
-            .connectTimeout(60, TimeUnit.SECONDS)
+        val client: OkHttpClient = OkHttpClient.Builder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .addInterceptor(Interceptor { chain: Interceptor.Chain ->
+                val original: Request = chain.request()
+                val request: Request =
+                    original.newBuilder()
+                        .header(
+                            "X-Api-Key", "b961d6ebe41b4fbbabff15789b9bf873"
+                        )
+                        .method(original.method, original.body)
+                        .build()
+                chain.proceed(request)
+            })
+            .addInterceptor(logging)
             .build()
-
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(okHttpClient.build())
+            .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
     }

@@ -17,7 +17,6 @@ interface NewsService {
         @Query("category") category: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int = 10,
-        @Query("apiKey") apiKey: String = "b961d6ebe41b4fbbabff15789b9bf873"
     ): Single<SourceResponse>
 
     @GET("everything?")
@@ -25,7 +24,6 @@ interface NewsService {
         @Query("sources") sources: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int = 10,
-        @Query("apiKey") apiKey: String = "b961d6ebe41b4fbbabff15789b9bf873"
     ): Single<NewsResponse>
 
     @GET("everything?")
@@ -33,6 +31,5 @@ interface NewsService {
         @Query("q") sources: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int = 10,
-        @Query("apiKey") apiKey: String = "b961d6ebe41b4fbbabff15789b9bf873"
     ): Single<NewsResponse>
 }
